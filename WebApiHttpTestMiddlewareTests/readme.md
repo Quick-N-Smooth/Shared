@@ -1,21 +1,26 @@
-## How it works
+## Http test concept for testing NET Core Middlewares
 
-In the API in the AuthorController Get method, there is a check for the "culture"
-http request header. It the header is missing the method throws an ```ArgumentNullException```.
+The following sample application gives a solution for http testing **NET Core middlewares**.
 
-There is also a ```CheckRequestCultureMiddleware.cs``` Middlerware which also checks
-for the same request header and also thows a exception.
+*Problem descrption:*
+Using Http request tests is a well defined solution for testing the whole http API application. It works by 
+creating http request in the test application and send it to the API.
+XUnit gives a control over the list of services in the target API application making it possible to use dubbed
+services or mockes during the http process.
 
-On the exception handling side, there is a ```ApiExceptionFilterAttribute.cs``` exception
-filter that handles the exception and converts it into a BadRequest response.
-There is also a ```ExceptionHandlingMiddleware``` that does the same.
+The problem with Testing Middlewares is that it is not a part of the Core services thus they are not in the service list.
+It is therefore impossible to have a direct control during the test.
+However DI also work in the case of Middlewares. So as a possible solition is to create a service component for the active
+part of the Middleware and add it to the service list. That particular service will be automatically injected into the
+Middleware. During the test XUnit gives control over the service thus gives an indirect controll over the middleware.
 
-Now the test...
+The sameple application uses an exception handling middleware for handling any non-handled exception.
+There are 2 types of custom global exception handling solution.
+- Exception filter attribute which works in controller methods
+- Exception handling middleware which catches unhandled exceptions during the whole http core chain.
 
-There are several options, 
-- When both the exceptionfilter AND the middleware ARE activated.
-- When only the exception filter is activated
-- When only the exception handling middleware is activated
+So, the testing creates and runs all the possible scenarios for handling an exception in filter attribute and exception
+handler middleware.
 
 
-*MORE EXPLANATINON IS IN THE TEST CASES*
+
