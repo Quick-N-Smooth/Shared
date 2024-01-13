@@ -1,41 +1,26 @@
-## Mocking/stubbing/faking services for http tests
+## Http test concept for testing NET Core Middlewares
 
-```
-Scenario:
-   Given that the user asks for the list of authors
-   When the request arrives
-   Then the application gets the authors list from the Authors Http Server
-```
+The following sample application gives a solution for http testing **NET Core middlewares**.
 
-The following sample application gives a solution for using
-mocks, fakes or stub in a web api http test for **dubbing the external services**.
+*Problem descrption:*
+Using Http request tests is a well defined solution for testing the whole http API application. It works by 
+creating http request in the test application and send it to the API.
+XUnit gives a control over the list of services in the target API application making it possible to use dubbed
+services or mockes during the http process.
 
-*The system test differs from the integration test in such a way that it simulates the whole system
-with dubbed read data from external (http or database) services.*
+The problem with Testing Middlewares is that it is not a part of the Core services thus they are not in the service list.
+It is therefore impossible to have a direct control during the test.
+However DI also work in the case of Middlewares. So as a possible solition is to create a service component for the active
+part of the Middleware and add it to the service list. That particular service will be automatically injected into the
+Middleware. During the test XUnit gives control over the service thus gives an indirect controll over the middleware.
 
-The problem with system testing such a solution is that in real life all
-the external services must be instanciated before the test is called. When the solution ruin
-through a postman of from browser, then all the external services instanciated and it runs on real data. 
-However when the WebApi run by test a framework, ONLY the WebApi is started.
+The sameple application uses an exception handling middleware for handling any non-handled exception.
+There are 2 types of custom global exception handling solution.
+- Exception filter attribute which works in controller methods
+- Exception handling middleware which catches unhandled exceptions during the whole http core chain.
 
-The solution is to dub the Client agent and making the Client to return a local testdata.
+So, the testing creates and runs all the possible scenarios for handling an exception in filter attribute and exception
+handler middleware.
 
-How it works:
-The solution fakes the IAuthorClient external interface and for the integration
-test it replaces the AuthorClient implementation into a fake.
-The original ```AuthorClient``` in the WebApi project is replaced by the ```AuthorClient```
-in the IntegrationTest project.
-See how it is done in the ```AuthorsHttpTests``` testclass:
-
-```
-    var webAppFactory = new WebApplicationFactory<Program>()
-        .WithWebHostBuilder(builder =>
-    {
-        builder.ConfigureTestServices(services =>
-        {
-            services.Replace(new ServiceDescriptor(typeof(IAuthorClient), typeof(Dubbed.AuthorClient), ServiceLifetime.Singleton));
-        });
-    });
-```
 
 
