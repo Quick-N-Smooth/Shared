@@ -1,2 +1,2 @@
 # Shared
-Part of the Q-N-S that is public
+The public part of the Q-N-S samples
