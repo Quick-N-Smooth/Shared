@@ -8,6 +8,11 @@ using WebApi.Middlewares;
 
 namespace WebApi.Tests;
 
+/// <summary>
+/// Test cases when 
+/// Request header checking middleware is OFF
+/// Exception handling middleware is ON
+/// </summary>
 [TestClass]
 public class ExceptionThrownInControllerTests
 {
@@ -28,6 +33,9 @@ public class ExceptionThrownInControllerTests
         this.builder = builder;
     }
 
+    /// <summary>
+    /// Etalon happy flow A1 showing the normal working flow
+    /// </summary>
     [TestMethod]
     public async Task HappyFlow()
     {
@@ -37,6 +45,9 @@ public class ExceptionThrownInControllerTests
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
+    /// <summary>
+    /// Etalon happy flow A2 showing the normal working flow
+    /// </summary>
     [TestMethod]
     public async Task HappyFlowWithExceptionFilter()
     {
@@ -46,6 +57,11 @@ public class ExceptionThrownInControllerTests
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
+    /// <summary> 
+    /// No exception filter is activated.
+    /// Exception thrown in the controller
+    /// The exception handling middleware handles the exception.
+    /// </summary>
     [TestMethod]
     public async Task ExceptionThrownInController_HandledInMiddleware()
     {
@@ -57,6 +73,13 @@ public class ExceptionThrownInControllerTests
         Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in middleware."));
     }
 
+    /// <summary> 
+    /// Exception filter is activated.
+    /// Exception thrown in the controller
+    /// The exception handling filter handles the exception.
+    /// The exception handling middleware let the handled exception go!!!!.
+    /// IT IS POSSIBLE TO USE BOTH THE FILTER ATTRIBUTE AND THE MIDDLEWARE TOGETHER
+    /// </summary>
     [TestMethod]
     public async Task ExceptionThrownInController_HandledInFilter()
     {

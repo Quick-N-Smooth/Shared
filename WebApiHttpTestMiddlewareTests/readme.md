@@ -1,41 +1,21 @@
-## Mocking/stubbing/faking services for http tests
+## How it works
 
-```
-Scenario:
-   Given that the user asks for the list of authors
-   When the request arrives
-   Then the application gets the authors list from the Authors Http Server
-```
+In the API in the AuthorController Get method, there is a check for the "culture"
+http request header. It the header is missing the method throws an ```ArgumentNullException```.
 
-The following sample application gives a solution for using
-mocks, fakes or stub in a web api http test for **dubbing the external services**.
+There is also a ```CheckRequestCultureMiddleware.cs``` Middlerware which also checks
+for the same request header and also thows a exception.
 
-*The system test differs from the integration test in such a way that it simulates the whole system
-with dubbed read data from external (http or database) services.*
+On the exception handling side, there is a ```ApiExceptionFilterAttribute.cs``` exception
+filter that handles the exception and converts it into a BadRequest response.
+There is also a ```ExceptionHandlingMiddleware``` that does the same.
 
-The problem with system testing such a solution is that in real life all
-the external services must be instanciated before the test is called. When the solution ruin
-through a postman of from browser, then all the external services instanciated and it runs on real data. 
-However when the WebApi run by test a framework, ONLY the WebApi is started.
+Now the test...
 
-The solution is to dub the Client agent and making the Client to return a local testdata.
-
-How it works:
-The solution fakes the IAuthorClient external interface and for the integration
-test it replaces the AuthorClient implementation into a fake.
-The original ```AuthorClient``` in the WebApi project is replaced by the ```AuthorClient```
-in the IntegrationTest project.
-See how it is done in the ```AuthorsHttpTests``` testclass:
-
-```
-    var webAppFactory = new WebApplicationFactory<Program>()
-        .WithWebHostBuilder(builder =>
-    {
-        builder.ConfigureTestServices(services =>
-        {
-            services.Replace(new ServiceDescriptor(typeof(IAuthorClient), typeof(Dubbed.AuthorClient), ServiceLifetime.Singleton));
-        });
-    });
-```
+There are several options, 
+- When both the exceptionfilter AND the middleware ARE activated.
+- When only the exception filter is activated
+- When only the exception handling middleware is activated
 
 
+*MORE EXPLANATINON IS IN THE TEST CASES*

@@ -1,13 +1,15 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Net;
-using WebApi.Middlewares;
 
 namespace WebApi.Tests;
 
+/// <summary>
+/// Test cases when 
+/// Request header checking middleware is ON
+/// Exception handling middleware is ON
+/// </summary>
 [TestClass]
 public class ExceptionThrownInMiddlewareTests
 {
@@ -28,6 +30,9 @@ public class ExceptionThrownInMiddlewareTests
         this.builder = builder;
     }
 
+    /// <summary>
+    /// Etalon happy flow A1 showing the normal working flow
+    /// </summary>
     [TestMethod]
     public async Task HappyFlow()
     {
@@ -37,6 +42,9 @@ public class ExceptionThrownInMiddlewareTests
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
+    /// <summary>
+    /// Etalon happy flow A2 showing the normal working flow
+    /// </summary>
     [TestMethod]
     public async Task HappyFlowWithExceptionFilter()
     {
@@ -46,6 +54,11 @@ public class ExceptionThrownInMiddlewareTests
         Assert.AreEqual(HttpStatusCode.OK, response.StatusCode);
     }
 
+    /// <summary> 
+    /// No exception filter is activated.
+    /// Exception thrown in the middleware
+    /// The exception handling middleware handles the exception.
+    /// </summary>
     [TestMethod]
     public async Task ExceptionThrownInMiddleware_HandledInMiddleware()
     {
@@ -57,6 +70,11 @@ public class ExceptionThrownInMiddlewareTests
         Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in middleware"));
     }
 
+    /// <summary> 
+    /// Exception filter is activated.
+    /// Exception thrown in the middleware
+    /// ONLY THE EXCEPTION HANDLER MIDDLEWARE CATCHES THE EXCEPTION!!!
+    /// </summary>
     [TestMethod]
     public async Task ExceptionThrownInMiddleware_ExceptionFilterIsActive()
     {
