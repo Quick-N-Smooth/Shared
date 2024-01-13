@@ -1,2 +1,2 @@
 # Shared
-The public part of the Q-N-S samples
+The public part of the Quick-N-Smooth samples
