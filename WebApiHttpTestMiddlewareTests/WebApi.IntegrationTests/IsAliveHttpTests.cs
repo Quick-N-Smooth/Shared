@@ -15,6 +15,10 @@ public class IsAliveHttpTests
         _httpClient = webAppFactory.CreateDefaultClient();
     }
 
+    /// <summary>
+    /// Just a check that the API is alive.
+    /// </summary>
+    /// <returns></returns>
     [TestMethod]
     public async Task IsAlive_ReturnsValidResponse()
     {
