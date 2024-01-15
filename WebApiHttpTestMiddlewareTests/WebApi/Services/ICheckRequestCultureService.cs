@@ -1,5 +1,4 @@
-﻿
-namespace WebApi.Middlewares
+﻿namespace WebApi.Services
 {
     public interface ICheckRequestCultureService
     {

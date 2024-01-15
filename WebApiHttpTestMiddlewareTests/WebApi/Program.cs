@@ -1,5 +1,6 @@
 using Omocom.BackOffice.Api.Filters;
 using WebApi.Middlewares;
+using WebApi.Services;
 
 namespace WebApi
 {

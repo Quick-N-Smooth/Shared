@@ -2,6 +2,8 @@
     https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/write?view=aspnetcore-6.0
 */
 
+using WebApi.Services;
+
 namespace WebApi.Middlewares;
 
 public class ExceptionHandlingMiddleware
@@ -17,6 +19,6 @@ public class ExceptionHandlingMiddleware
 
     public async Task InvokeAsync(HttpContext context)
     {
-        await _service.HandleExceptionAsync(context, _next);
+        await _service.InvokeWithExceptionHandlingAsync(context, _next);
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.Net;
 using WebApi.Middlewares;
+using WebApi.Services;
 
 namespace WebApi.Tests;
 

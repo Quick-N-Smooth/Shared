@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Net;
+using WebApi.Services;
 
 namespace WebApi.Middlewares
 {

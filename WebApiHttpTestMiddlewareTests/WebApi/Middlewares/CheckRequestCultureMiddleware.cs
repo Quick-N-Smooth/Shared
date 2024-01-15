@@ -1,4 +1,6 @@
-﻿namespace WebApi.Middlewares;
+﻿using WebApi.Services;
+
+namespace WebApi.Middlewares;
 
 public class CheckRequestCultureMiddleware
 {

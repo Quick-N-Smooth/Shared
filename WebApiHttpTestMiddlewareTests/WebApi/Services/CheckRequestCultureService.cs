@@ -1,6 +1,6 @@
 ﻿using System.Net;
 
-namespace WebApi.Middlewares
+namespace WebApi.Services
 {
     public class CheckRequestCultureService : ICheckRequestCultureService
     {
