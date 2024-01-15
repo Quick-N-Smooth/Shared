@@ -46,8 +46,8 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         {
             Status = StatusCodes.Status400BadRequest,
             Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
-            Title = $"{exception.Message}",
-            Detail = "ArgumentNullException handled in FilterAttribute"
+            Title = "ArgumentNullException handled in FilterAttribute",
+            Detail = $"{exception.Message}"
         };
 
         context.Result = new ObjectResult(details)
@@ -64,9 +64,9 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
         var details = new ProblemDetails
         {
             Status = StatusCodes.Status500InternalServerError,
-            Title = "An error occurred while processing your request.",
+            Title = "Unknown exception handled in FilterAttribute",
             Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
-            Detail = "Unknown exception handled in FilterAttribute"
+            Detail = "An error occurred while processing your request."
         };
 
         context.Result = new ObjectResult(details)

@@ -66,8 +66,8 @@ public class ExceptionThrownInMiddlewareTests
         Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
 
         var stringResult = await response.Content.ReadAsStringAsync();
-        Assert.IsTrue(stringResult.Contains("Argument null exception from middleware"));
-        Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in middleware"));
+        Assert.IsTrue(stringResult.Contains("Argument null exception from Middleware"));
+        Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in Middleware"));
     }
 
     /// <summary> 
@@ -82,7 +82,7 @@ public class ExceptionThrownInMiddlewareTests
         Assert.AreEqual(HttpStatusCode.BadRequest, response.StatusCode);
 
         var stringResult = await response.Content.ReadAsStringAsync();
-        Assert.IsTrue(stringResult.Contains("Argument null exception from middleware"));
-        Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in middleware"));
+        Assert.IsTrue(stringResult.Contains("Argument null exception from Middleware"));
+        Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in Middleware"));
     }
 }

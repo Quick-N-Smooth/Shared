@@ -14,8 +14,8 @@ namespace UnitTests
 
         // use full namespace for exception types, it is easier then to interpret the test
         [Theory]
-        [InlineData(typeof(System.ArgumentNullException), HttpStatusCode.BadRequest, "ArgumentNullException", "middleware")]
-        [InlineData(typeof(Microsoft.AspNetCore.Connections.ConnectionResetException), HttpStatusCode.RequestTimeout, "ConnectionResetException handled in middleware")]
+        [InlineData(typeof(System.ArgumentNullException), HttpStatusCode.BadRequest, "ArgumentNullException", "Middleware")]
+        [InlineData(typeof(Microsoft.AspNetCore.Connections.ConnectionResetException), HttpStatusCode.RequestTimeout, "ConnectionResetException handled in Middleware")]
         public void HandleKnownExceptions(Type exceptionType, HttpStatusCode expectedStatusCode, params string[]? expectedWordsInDescription)
         {
             var exception = InstanciateExceptionOfType(exceptionType);
@@ -37,7 +37,7 @@ namespace UnitTests
             {
                 foreach (var expectedWord in expectedWordsInDescription)
                 {
-                    Assert.True(response.Description.Contains(expectedWord), $"The expected word in the error description in not found '{expectedWord}'");
+                    Assert.True(response.Description?.Title?.Contains(expectedWord), $"The expected word in the error description in not found '{expectedWord}'");
                 }
             }
         }

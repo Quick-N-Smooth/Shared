@@ -10,7 +10,7 @@ namespace WebApi.Services
 
             if (string.IsNullOrWhiteSpace(cultureQuery))
             {
-                throw new ArgumentNullException("Argument null exception from middleware");
+                throw new ArgumentNullException("Argument null exception from Middleware");
             }
             return;
         }

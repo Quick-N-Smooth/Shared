@@ -71,7 +71,7 @@ public class ExceptionThrownInControllerTests
 
         var stringResult = await response.Content.ReadAsStringAsync();
         Assert.IsTrue(stringResult.Contains("Argument null exception from Controller"));
-        Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in middleware."));
+        Assert.IsTrue(stringResult.Contains("ArgumentNullException handled in Middleware"));
     }
 
     /// <summary> 

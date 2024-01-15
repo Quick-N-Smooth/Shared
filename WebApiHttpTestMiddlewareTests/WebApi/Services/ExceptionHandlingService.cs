@@ -1,4 +1,6 @@
 ﻿using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 
@@ -33,18 +35,59 @@ public class ExceptionHandlingService : IExceptionHandlingService
     {
         ExceptionResponse exceptionResponse = exception switch
         {
-            ArgumentNullException _ => new ExceptionResponse(HttpStatusCode.BadRequest, $"ArgumentNullException handled in middleware. {exception.Message}"),
+            ArgumentNullException _ => HandleArgumentNullException(exception),
             ConnectionResetException _ => HandleConnectionResetException(exception),
-            _ => new ExceptionResponse(HttpStatusCode.InternalServerError, "Internal server error handled in middleware.")
+            _ => HandleUnhandledException(exception)
         };
         ExceptionResponse response = exceptionResponse;
         return response;
     }
 
-    // handle a specific exception in a separate method
+    private static ExceptionResponse HandleArgumentNullException(Exception exception)
+    {
+        var typedException = (ArgumentException)exception;
+
+        var details = new ProblemDetails()
+        {
+            Status = StatusCodes.Status400BadRequest,
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.5.1",
+            Title = "ArgumentNullException handled in Middleware",
+            Detail = $"Parameter: {typedException.ParamName}; Message: {typedException.Message}",
+        };
+
+        // logger.Warning(context.Exception, "Client disconected, returning Timeout");
+
+        return new ExceptionResponse(HttpStatusCode.BadRequest, details);
+    }
+
     private static ExceptionResponse HandleConnectionResetException(Exception exception)
     {
-        return new ExceptionResponse(HttpStatusCode.RequestTimeout, $"ConnectionResetException handled in middleware. {exception.Message}");
+        var details = new ProblemDetails()
+        {
+            Type = typeof(Exception).FullName,
+            Title = "ConnectionResetException handled in Middleware",
+            Detail =  $"{typeof(Exception).Name} - {exception.Message}"
+        };
+
+        // logger.Warning(context.Exception, "Client disconected, returning Timeout");
+
+        return new ExceptionResponse(HttpStatusCode.RequestTimeout, details);
+    }
+
+    private static ExceptionResponse HandleUnhandledException(Exception exception)
+    {
+
+        // NOTE: the details of the exception can be hidden from the response.
+        // it can be Logged though
+        var details = new ProblemDetails
+        {
+            Status = StatusCodes.Status401Unauthorized,
+            Title = "An error occurred while processing your request.",
+            Type = "https://tools.ietf.org/html/rfc7231#section-6.6.1",
+            Detail = null // or exception.Message
+        };
+
+        return new ExceptionResponse(HttpStatusCode.InternalServerError, details);
     }
 }
 
@@ -57,4 +100,4 @@ public static class CheckRequExtentions
     }
 }
 
-public record ExceptionResponse(HttpStatusCode StatusCode, string Description);
+public record ExceptionResponse(HttpStatusCode StatusCode, ProblemDetails Description);
