@@ -15,12 +15,12 @@ namespace WebApi.Tests;
 /// NO Request header checking middleware activated
 /// </summary>
 [TestClass]
-public class NoMiddlewareExceptionHandling
+public class NoMiddlewareTests
 {
     private readonly WebApplicationBuilder builder;
     private HttpClient _httpClient;
 
-    public NoMiddlewareExceptionHandling()
+    public NoMiddlewareTests()
     {
         var webAppFactory = new WebApplicationFactory<Program>()
             .WithWebHostBuilder(builder =>

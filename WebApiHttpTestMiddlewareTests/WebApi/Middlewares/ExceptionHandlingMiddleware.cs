@@ -2,6 +2,7 @@
     https://learn.microsoft.com/en-us/aspnet/core/fundamentals/middleware/write?view=aspnetcore-6.0
 */
 
+using Microsoft.Extensions.Options;
 using WebApi.Services;
 
 namespace WebApi.Middlewares;
@@ -20,5 +21,18 @@ public class ExceptionHandlingMiddleware
     public async Task InvokeAsync(HttpContext context)
     {
         await _service.InvokeWithExceptionHandlingAsync(context, _next);
+    }
+}
+
+public static class ExceptionHandlingMiddlewareExtentions
+{
+    public static IApplicationBuilder UseExceptionHandlingMiddleware(this IApplicationBuilder app)
+    {
+        if (app == null)
+        {
+            throw new ArgumentNullException("app");
+        }
+
+        return app.UseMiddleware<ExceptionHandlingMiddleware>();
     }
 }

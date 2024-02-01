@@ -1,22 +1,23 @@
-﻿using Microsoft.AspNetCore.Connections;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using WebApi.Middlewares;
 
 namespace Omocom.BackOffice.Api.Filters;
 
 public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 {
 	private readonly IDictionary<Type, Action<ExceptionContext>> exceptionHandlers;
+    private readonly bool handleUnknowException;
 
-    public ApiExceptionFilterAttribute()
+    public ApiExceptionFilterAttribute(bool handleUnknowException = true)
     {
+
 		//this.logger = logger;
         // Register known exception types and handlers.
         exceptionHandlers = new Dictionary<Type, Action<ExceptionContext>>
         {
             { typeof(ArgumentNullException), HandleArgumentNullException }
         };
+        this.handleUnknowException = handleUnknowException;
     }
 
 	public override void OnException(ExceptionContext context)
@@ -61,6 +62,11 @@ public class ApiExceptionFilterAttribute : ExceptionFilterAttribute
 
     private void HandleUnknownException(ExceptionContext context)
     {
+        if (!handleUnknowException)
+        {
+            return;
+        }
+
         var details = new ProblemDetails
         {
             Status = StatusCodes.Status500InternalServerError,

@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32811.315
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallApiParallel.Api", "CallApiParallel.Api\CallApiParallel.Api.csproj", "{413976D0-A35B-4E27-84C9-CE739CB7C178}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CallApiParallel.CallApi", "CallApiParallel.Run\CallApiParallel.CallApi.csproj", "{08D14D40-40C6-4E12-B579-93FD9A2F2893}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{413976D0-A35B-4E27-84C9-CE739CB7C178}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{413976D0-A35B-4E27-84C9-CE739CB7C178}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{413976D0-A35B-4E27-84C9-CE739CB7C178}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{413976D0-A35B-4E27-84C9-CE739CB7C178}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08D14D40-40C6-4E12-B579-93FD9A2F2893}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08D14D40-40C6-4E12-B579-93FD9A2F2893}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08D14D40-40C6-4E12-B579-93FD9A2F2893}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08D14D40-40C6-4E12-B579-93FD9A2F2893}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DB32DCB0-8211-4926-B47B-F82C10385997}
+	EndGlobalSection
+EndGlobal

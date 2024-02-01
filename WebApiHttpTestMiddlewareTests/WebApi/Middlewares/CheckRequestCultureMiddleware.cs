@@ -20,3 +20,16 @@ public class CheckRequestCultureMiddleware
         await _next(context);
     }
 }
+
+public static class CheckRequestCultureMiddlewareExtentions
+{
+    public static IApplicationBuilder UseCheckRequestCultureMiddleware(this IApplicationBuilder app)
+    {
+        if (app == null)
+        {
+            throw new ArgumentNullException("app");
+        }
+
+        return app.UseMiddleware<CheckRequestCultureMiddleware>();
+    }
+}

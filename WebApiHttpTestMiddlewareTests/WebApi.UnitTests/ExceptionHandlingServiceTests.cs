@@ -1,7 +1,7 @@
 using System.Net;
 using WebApi.Services;
 
-namespace UnitTests
+namespace WebApi.UnitTests
 {
     public class ExceptionHandlingServiceTests
     {
@@ -15,7 +15,7 @@ namespace UnitTests
         // use full namespace for exception types, it is easier then to interpret the test
         [Theory]
         [InlineData(typeof(System.ArgumentNullException), HttpStatusCode.BadRequest, "ArgumentNullException", "Middleware")]
-        [InlineData(typeof(Microsoft.AspNetCore.Connections.ConnectionResetException), HttpStatusCode.RequestTimeout, "ConnectionResetException handled in Middleware")]
+        [InlineData(typeof(UnknownException), HttpStatusCode.InternalServerError, "UnknownException handled in Middleware")]
         public void HandleKnownExceptions(Type exceptionType, HttpStatusCode expectedStatusCode, params string[]? expectedWordsInDescription)
         {
             var exception = InstanciateExceptionOfType(exceptionType);
@@ -26,7 +26,7 @@ namespace UnitTests
 
             if (exception is null)
             {
-                throw new ArgumentNullException("Exception type is impossible to create.");
+                throw new InvalidOperationException("Exception type is impossible to create.");
             }
 
             ExceptionResponse response = target.CreateExceptionResponse(exception);

@@ -7,13 +7,13 @@ using WebApi.ViewModels;
 namespace WebApi.Controllers
 {
     [Route("api/[controller]")]
-    [ApiExceptionFilter(handleUnknowException:false)]
+    [ApiExceptionFilter(handleUnknowException:true)]
     [ApiController]
-    public class AuthorWithExceptionFilterController : ControllerBase
+    public class AuthorWithExceptionFilterHandleAllController : ControllerBase
     {
         ILogger<AuthorWithExceptionFilterController> logger;
 
-        public AuthorWithExceptionFilterController(ILogger<AuthorWithExceptionFilterController> logger)
+        public AuthorWithExceptionFilterHandleAllController(ILogger<AuthorWithExceptionFilterController> logger)
             : base()
         {
             this.logger = logger;
@@ -35,6 +35,7 @@ namespace WebApi.Controllers
 
             return Ok(model);
         }
+
 
         [HttpGet("ThrowUnknown/{id}")]
         [ProducesResponseType(StatusCodes.Status200OK, Type = typeof(AuthorModel))]

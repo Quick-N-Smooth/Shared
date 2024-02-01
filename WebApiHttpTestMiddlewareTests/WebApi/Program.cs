@@ -33,8 +33,8 @@ namespace WebApi
             // NOTE that we instanciated a service as a first step
             // DI will then insert the service into the middleware and 
             // also the middleware gets testable by replacing the service in the test class
-            app.UseMiddleware<ExceptionHandlingMiddleware>();
-            app.UseMiddleware<CheckRequestCultureMiddleware>();
+            app.UseExceptionHandlingMiddleware();
+            app.UseCheckRequestCultureMiddleware();
 
             // use Swagger only in development
             if (app.Environment.IsDevelopment())
