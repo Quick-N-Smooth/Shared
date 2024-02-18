@@ -41,5 +41,11 @@ namespace CallAsyncMethodsParallel.CallApi
             await Task.Delay(delay);
             return await Task.FromResult(result);
         }
+
+        internal static async Task<Collection<string>> GetTwitterFollowersThrowTimeout(int delay)
+        {
+            await Task.Delay(delay);
+            throw new TimeoutException();
+        }
     }
 }

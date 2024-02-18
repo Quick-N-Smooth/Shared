@@ -14,7 +14,7 @@ namespace CallAsyncMethodsParallel.CallApi
                 await semaphoreSlim.WaitAsync().ConfigureAwait(false);
                 //FinalResult = await CombineEnumerablesAsync<string>(FinalResult, result)
                 //    .ContinueWith(combineTask => combineTask.Result.ToArray(), TaskContinuationOptions.OnlyOnRanToCompletion);
-                FinalResult = CombineEnumerables<string>(FinalResult, result).ToArray();
+                FinalResult = CombineEnumerables<string>(FinalResult, result);
             }
             finally
             {
@@ -30,7 +30,7 @@ namespace CallAsyncMethodsParallel.CallApi
                 await semaphoreSlim.WaitAsync().ConfigureAwait(false);
                 //FinalResult = await CombineEnumerablesAsync<string>(FinalResult, result)
                 //    .ContinueWith(combineTask => combineTask.Result.ToArray(), TaskContinuationOptions.OnlyOnRanToCompletion);
-                FinalResult = CombineEnumerables<string>(FinalResult, result).ToArray();
+                FinalResult = CombineEnumerables<string>(FinalResult, result);
             }
             finally
             {
@@ -46,7 +46,7 @@ namespace CallAsyncMethodsParallel.CallApi
                 await semaphoreSlim.WaitAsync().ConfigureAwait(false);
                 //FinalResult = await CombineEnumerablesAsync<string>(FinalResult, result)
                 //    .ContinueWith(combineTask => combineTask.Result.ToArray(), TaskContinuationOptions.OnlyOnRanToCompletion);
-                FinalResult = CombineEnumerables<string>(FinalResult, result).ToArray();
+                FinalResult = CombineEnumerables<string>(FinalResult, result);
             }
             finally
             {
@@ -55,54 +55,24 @@ namespace CallAsyncMethodsParallel.CallApi
         }
 
         // async alternative
-        private static async Task<IEnumerable<T>> CombineEnumerablesAsync<T>(IEnumerable<T> master, IEnumerable<T>? source)
+        private static async Task<IEnumerable<T>> CombineCollectionsAsync<T>(IEnumerable<T> master, IEnumerable<T>? source)
         {
-            var result = new Collection<T>();
-
-            foreach (T item in master)
-            {
-                await Task.Delay(100);
-                result.Add(item);
-            }
-
             if (source is not null)
             {
-                foreach (T item in source)
-                {
-                    await Task.Delay(100);
-                    result.Add(item);
-                }
+                master = master.Concat(source);
             }
 
-            return result;
+            return master;
         }
 
         private static IEnumerable<T> CombineEnumerables<T>(IEnumerable<T> master, IEnumerable<T>? source)
         {
-            var result = new Collection<T>();
-
-            foreach (T item in master)
-            {
-                Thread.Sleep(100);
-                result.Add(item);
-            }
-
             if (source is not null)
             {
-                foreach (T item in source)
-                {
-                    Thread.Sleep(100);
-                    result.Add(item);
-                }
+               master = master.Concat(source);
             }
 
-            return result;
-        }
-
-        private static IEnumerable<T> CombineEnumerablesThrowException<T>(IEnumerable<T> master, IEnumerable<T>? source)
-        {
-            Thread.Sleep(100);
-            throw new NotImplementedException();
+            return master;
         }
     }
 }
