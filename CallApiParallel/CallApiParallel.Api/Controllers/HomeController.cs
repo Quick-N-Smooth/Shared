@@ -7,7 +7,7 @@ namespace CallAsyncMethodsParallel.Api.Controllers
     public class HomeController : ControllerBase
     {
         [HttpGet("Home")]
-        public async Task<IActionResult> Home()
+        public IActionResult Home()
         {
             return Ok(new
             {

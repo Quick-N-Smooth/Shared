@@ -1,34 +1,36 @@
 ﻿using CallAsyncMethodsParallel.CallApi;
-using Newtonsoft.Json.Linq;
 using System.Diagnostics;
-using System.Runtime.ExceptionServices;
 
 public class Program
 {
+
     public static async Task Main(string[] args)
     {
         await SequentialRun();
         await ParallelRun();
 
-        await SequentialRunWithException();
-        await ParallelRunWithExceptions();
+        //await SequentialRunWithException();
+        //await ParallelRunWithExceptions();
 
         Console.ReadLine();
     }
 
     private static async Task SequentialRun()
     {
-        Console.WriteLine("Sequential API call with 200 response");
+        Console.WriteLine("Sequential API call");
 
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5052");
+
         var stopWatch = Stopwatch.StartNew();
 
-        var youtubeSubscribers = await ApiCalls.GetYoutubeSubscribers(httpClient);
-        var twitterFollowers = await ApiCalls.GetTwitterFollowers(httpClient);
-        var githubFollowers = await ApiCalls.GetGithubFollowers(httpClient);
+        var apiClient = new SocialMediaApiCalls();
 
-        Console.WriteLine($"Done in {stopWatch.ElapsedMilliseconds} ms");
+        var youtubeSubscribers = await apiClient.GetYoutubeSubscribers(httpClient, 2000);
+        var twitterFollowers = await apiClient.GetTwitterFollowers(httpClient, 1900);
+        var githubFollowers = await apiClient.GetGithubFollowers(httpClient, 1800);
+
+        var result = $"Sequential done in {stopWatch.ElapsedMilliseconds} ms";
 
         dynamic userProfile = new
         {
@@ -38,27 +40,36 @@ public class Program
             GetGithubFollowers = githubFollowers
         };
 
-        Console.WriteLine(userProfile.ToString());
+        result += userProfile;
+
+        Console.WriteLine(result);
+
+        foreach (var item in apiClient.FinalResult)
+        {
+            Console.WriteLine(item);
+        }
     }
 
     private static async Task ParallelRun()
     {
 
-        Console.WriteLine("Parallel call with 200 response");
+        Console.WriteLine("Parallel");
 
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5052");
+
         var stopWatch = Stopwatch.StartNew();
 
-        var youtubeSubscribers = ApiCalls.GetYoutubeSubscribers(httpClient);
-        var twitterFollowers = ApiCalls.GetTwitterFollowers(httpClient);
-        var githubFollowers = ApiCalls.GetGithubFollowers(httpClient);
+        var apiClient = new SocialMediaApiCalls();
+
+        var youtubeSubscribers = apiClient.GetYoutubeSubscribers(httpClient, 2000);
+        var twitterFollowers = apiClient.GetTwitterFollowers(httpClient, 1900);
+        var githubFollowers = apiClient.GetGithubFollowers(httpClient, 1800);
 
         await Task.WhenAll(youtubeSubscribers, twitterFollowers, githubFollowers);
 
-        Console.WriteLine($"Done is {stopWatch.ElapsedMilliseconds} ms");
+        var result = $"Parallel done in {stopWatch.ElapsedMilliseconds} ms";
 
-        // Note that after WhenAll, it is safe to use Result
         dynamic userProfile = new
         {
             Name = "Tom",
@@ -67,7 +78,14 @@ public class Program
             GetGithubFollowers = githubFollowers.Result
         };
 
-        Console.WriteLine(userProfile.ToString());
+        result += userProfile;
+
+        Console.WriteLine(result);
+
+        foreach (var item in apiClient.FinalResult)
+        {
+            Console.WriteLine(item);
+        }
     }
 
     private static async Task SequentialRunWithException()
@@ -79,9 +97,9 @@ public class Program
         var stopWatch = Stopwatch.StartNew();
 
         // exception is handled by a null result but can be a http code other than 200
-        var youtubeSubscribers = await ApiCalls.GetYoutubeSubscribersUnauthorized(httpClient);
-        var twitterFollowers = await ApiCalls.GetTwitterFollowers(httpClient);
-        var githubFollowers = await ApiCalls.GetGithubFollowersWithException(httpClient);
+        var youtubeSubscribers = await SocialMediaApiCalls.GetYoutubeSubscribersUnauthorized(httpClient);
+        var twitterFollowers = await SocialMediaApiCalls.GetTwitterFollowersWithException(httpClient);
+        var githubFollowers = await SocialMediaApiCalls.GetGithubFollowersWithException(httpClient);
 
         Console.WriteLine($"Done in {stopWatch.ElapsedMilliseconds} ms");
 
@@ -109,11 +127,11 @@ public class Program
         httpClient.BaseAddress = new Uri("http://localhost:5052");
         var stopWatch = Stopwatch.StartNew();
 
-        Task allResultTask = null;
+        Task allResultTask;
 
-        var youtubeSubscribers = ApiCalls.GetYoutubeSubscribers(httpClient);
-        var twitterFollowers = ApiCalls.GetTwitterFollowersWithException(httpClient);
-        var githubFollowers = ApiCalls.GetTwitterFollowersWithBadRequest(httpClient);
+        var youtubeSubscribers = SocialMediaApiCalls.GetYoutubeSubscribersUnauthorized(httpClient);
+        var twitterFollowers = SocialMediaApiCalls.GetTwitterFollowersWithException(httpClient);
+        var githubFollowers = SocialMediaApiCalls.GetTwitterFollowersWithBadRequest(httpClient);
 
         allResultTask = Task.WhenAll(youtubeSubscribers, twitterFollowers, githubFollowers);
 

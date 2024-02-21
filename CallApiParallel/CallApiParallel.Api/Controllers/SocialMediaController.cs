@@ -1,73 +1,88 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Collections.ObjectModel;
 
-namespace CallAsyncMethodsParallel.Api.Controllers
+namespace CallAsyncMethodsParallel.Api.Controllers;
+
+[ApiController]
+public class SocialMediaController : ControllerBase
 {
-    [ApiController]
-    public class SocialMediaController : ControllerBase
+
+    [HttpGet("youtube200")]
+    public async Task<IActionResult> GetYoutubeActionDetails(int delay)
     {
-
-        [HttpGet("youtube200")]
-        public async Task<IActionResult> GetYoutubeActionDetails()
+        var subsribers = new Collection<string>();
+        for (var i = 0; i < 10; i++)
         {
-            await Task.Delay(1000);
-            return Ok(new
-            {
-                Subscribers = 1450
-            });
+            subsribers.Add("YoutubeSubscriber_" + i.ToString());
         }
-
-        [HttpGet("youtube401")]
-        public async Task<IActionResult> GetYoutubeActionDetailsUnauthorized()
+        await Task.Delay(delay);
+        return Ok(new
         {
-            await Task.Delay(2000);
-            return Unauthorized(new
-                {
-                    Message = "This is a 401 error."
-                });
-        }
+            Subscribers = subsribers
+        });
+    }
 
-        [HttpGet("github200")]
-        public async Task<IActionResult> GetGitHubDetails()
+    [HttpGet("github200")]
+    public async Task<IActionResult> GetGitHubDetails(int delay)
+    {
+        var subsribers = new Collection<string>();
+        for (var i = 0; i < 10; i++)
         {
-            await Task.Delay(1000);
-            return Ok(new
-            {
-                Followers = 450
-            }) ;
+            subsribers.Add("GithubSubscriber_" + i.ToString());
         }
-
-        [HttpGet("github500")]
-        public async Task<IActionResult> GetGitHubDetailsThrowException()
+        await Task.Delay(delay);
+        return Ok(new
         {
-            await Task.Delay(2000);
-            throw new Exception("Exception from github call");
-        }
+            Subscribers = subsribers
+        });
+    }
 
-        [HttpGet("twitter200")]
-        public async Task<IActionResult> GetTwitterDetails()
-        { 
-            await Task.Delay (1000);
-            return Ok(new
-            {
-                Followers = 15
-            });
-        }
-
-        [HttpGet("twitter500")]
-        public async Task<IActionResult> GetTwitterDetailsThrowException()
+    [HttpGet("twitter200")]
+    public async Task<IActionResult> GetTwitterDetails(int delay)
+    {
+        var subsribers = new Collection<string>();
+        for (var i = 0; i < 10; i++)
         {
-            await Task.Delay(2000);
-            throw new Exception("This is an exception from twitter call");
+            subsribers.Add("TwitterSubscriber_" + i.ToString());
         }
-
-        [HttpGet("twitter400")]
-        public async Task<IActionResult> GetTwitterDetailsReturnBadRequest()
+        await Task.Delay(delay);
+        return Ok(new
         {
-            await Task.Delay(2000);
-            return BadRequest(new
-            {
-                Message = "This is a 400 error."
-            });
-        }
+            Subscribers = subsribers
+        });
+    }
+
+    [HttpGet("youtube401")]
+    public async Task<IActionResult> GetYoutubeActionDetailsUnauthorized(int delay)
+    {
+        await Task.Delay(delay);
+        return Unauthorized(new
+        {
+            Message = "This is a 401 error."
+        });
+    }
+
+    [HttpGet("twitter400")]
+    public async Task<IActionResult> GetTwitterDetailsReturnBadRequest(int delay)
+    {
+        await Task.Delay(delay);
+        return BadRequest(new
+        {
+            Message = "This is a 400 error."
+        });
+    }
+
+    [HttpGet("github500")]
+    public async Task<IActionResult> GetGitHubDetailsThrowException(int delay)
+    {
+        await Task.Delay(delay);
+        throw new TimeoutException("Exception from github call");
+    }
+
+    [HttpGet("twitter500")]
+    public async Task<IActionResult> GetTwitterDetailsThrowException(int delay)
+    {
+        await Task.Delay(delay);
+        throw new TimeoutException("This is an exception from twitter call");
     }
 }
