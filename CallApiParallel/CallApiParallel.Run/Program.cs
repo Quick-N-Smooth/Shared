@@ -17,7 +17,7 @@ public class Program
 
     private static async Task SequentialRun()
     {
-        Console.WriteLine("Sequential API call");
+        Console.WriteLine($"Sequential API call, start on thread: {Thread.CurrentThread.ManagedThreadId}");
 
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5052");
@@ -42,9 +42,11 @@ public class Program
 
         result += userProfile;
 
+        Console.WriteLine($"Sequential API call, write out result on thread: {Thread.CurrentThread.ManagedThreadId}");
+
         Console.WriteLine(result);
 
-        foreach (var item in apiClient.FinalResult)
+        foreach (var item in apiClient.SharedResultList)
         {
             Console.WriteLine(item);
         }
@@ -53,7 +55,7 @@ public class Program
     private static async Task ParallelRun()
     {
 
-        Console.WriteLine("Parallel");
+        Console.WriteLine($"Parallel API call, start on thread: {Thread.CurrentThread.ManagedThreadId} ");
 
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5052");
@@ -80,9 +82,10 @@ public class Program
 
         result += userProfile;
 
+        Console.WriteLine($"Parallel API call, write out result on thread: {Thread.CurrentThread.ManagedThreadId}");
         Console.WriteLine(result);
 
-        foreach (var item in apiClient.FinalResult)
+        foreach (var item in apiClient.SharedResultList)
         {
             Console.WriteLine(item);
         }

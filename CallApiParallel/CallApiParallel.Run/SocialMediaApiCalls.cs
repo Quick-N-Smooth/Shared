@@ -1,16 +1,22 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Diagnostics;
 
 namespace CallAsyncMethodsParallel.CallApi;
 
 internal class SocialMediaApiCalls
 {
     private static SemaphoreSlim semaphoreSlim = new SemaphoreSlim(1, 1);
-    public IEnumerable<string> FinalResult = Array.Empty<string>();
+    public IEnumerable<string> SharedResultList = Array.Empty<string>();
 
-    private IEnumerable<string> getFinalResult()
+    private IEnumerable<string> getReferenceToSharedResultList()
     {
-        return FinalResult;
+        return SharedResultList;
+    }
+
+    private void saveToSharedResultList(IEnumerable<string> result)
+    {
+        SharedResultList = result;
     }
 
     #region HappyFlow
@@ -20,10 +26,11 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "youtube200" + "?" + "delay=" + delay);
+            Console.WriteLine($"GetYoutubeSubscribers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "youtube200" + "?" + "delay=" + delay).ConfigureAwait(false);
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
-            FinalResult = CombineEnumerables<string>(getFinalResult, list);
+            CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
             return list?.Count();
         }
         catch
@@ -38,10 +45,11 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "twitter200" + "?" + "delay=" + delay);
+            Console.WriteLine($"GetTwitterFollowers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "twitter200" + "?" + "delay=" + delay).ConfigureAwait(false);
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
-            FinalResult = CombineEnumerables(getFinalResult, list);
+            CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
             return list?.Count();
         }
         catch
@@ -56,10 +64,11 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "github200" + "?" + "delay=" + delay);
+            Console.WriteLine($"GetGithubFollowers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "github200" + "?" + "delay=" + delay).ConfigureAwait(false);
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
-            FinalResult = CombineEnumerables(getFinalResult, list);
+            CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
             return list?.Count();
         }
         catch
@@ -133,26 +142,29 @@ internal class SocialMediaApiCalls
 
     #region "Display"
 
-    private static IEnumerable<T> CombineEnumerables<T>(Func<IEnumerable<T>> getMasterFunc, IEnumerable<T>? source)
+    private static void CombineEnumerables(Func<IEnumerable<string>> getReferenceToSharedResultList, Action<IEnumerable<string>> saveToSharedResultList, IEnumerable<string>? sourceList)
     {
         semaphoreSlim.Wait();
 
         try
         {
-            var master = getMasterFunc.Invoke();
+            var masterList = getReferenceToSharedResultList.Invoke();
 
-            var editMaster = master.ToList();
+            var threadId = Thread.CurrentThread.ManagedThreadId;
 
-            if (source is not null)
+            var mutableMaster = masterList.ToList();
+
+            if (sourceList is not null)
             {
-                foreach (T item in source)
+                foreach (var item in sourceList)
                 {
                     Thread.Sleep(100);
-                    editMaster.Add(item);
+                    mutableMaster.Add($"{item} result handled on thread: {threadId}");
                 }
             }
 
-            return editMaster;
+            saveToSharedResultList.Invoke(mutableMaster);
+
         }
         finally
         {
