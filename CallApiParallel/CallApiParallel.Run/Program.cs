@@ -26,9 +26,9 @@ public class Program
 
         var apiClient = new SocialMediaApiCalls();
 
-        var youtubeSubscribers = await apiClient.GetYoutubeSubscribers(httpClient, 2000);
-        var twitterFollowers = await apiClient.GetTwitterFollowers(httpClient, 1900);
-        var githubFollowers = await apiClient.GetGithubFollowers(httpClient, 1800);
+        var youtubeSubscribers = await apiClient.GetYoutubeSubscribers(httpClient, delay: 2000);
+        var twitterFollowers = await apiClient.GetTwitterFollowers(httpClient, delay: 1900);
+        var githubFollowers = await apiClient.GetGithubFollowers(httpClient, delay: 1800);
 
         var result = $"Sequential done in {stopWatch.ElapsedMilliseconds} ms";
 
@@ -64,9 +64,9 @@ public class Program
 
         var apiClient = new SocialMediaApiCalls();
 
-        var youtubeSubscribers = apiClient.GetYoutubeSubscribers(httpClient, 2000);
-        var twitterFollowers = apiClient.GetTwitterFollowers(httpClient, 1900);
-        var githubFollowers = apiClient.GetGithubFollowers(httpClient, 1800);
+        var youtubeSubscribers = apiClient.GetYoutubeSubscribers(httpClient, delay: 2000);
+        var twitterFollowers = apiClient.GetTwitterFollowers(httpClient, delay: 1900);
+        var githubFollowers = apiClient.GetGithubFollowers(httpClient, delay: 1800);
 
         await Task.WhenAll(youtubeSubscribers, twitterFollowers, githubFollowers);
 
