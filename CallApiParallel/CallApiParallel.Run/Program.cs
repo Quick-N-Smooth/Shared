@@ -6,6 +6,13 @@ public class Program
 
     public static async Task Main(string[] args)
     {
+        var syncObject = SynchronizationContext.Current is null ? "null" : SynchronizationContext.Current.ToString();
+        Console.WriteLine($"The SynchronizationContext is {syncObject}");
+
+        var taskScheduler = TaskScheduler.Current.ToString();
+
+        Console.WriteLine($"The Task Scheduler is {taskScheduler}");
+
         await SequentialRun();
         await ParallelRun();
 
