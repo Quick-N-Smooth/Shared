@@ -31,8 +31,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            SharedLog.Add($"GetYoutubeSubscribers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            SharedLog.Add($"GetYoutubeSubscribers method start on thread: {Thread.CurrentThread.ManagedThreadId}");
             result = await httpClient.GetStringAsync(httpClient.BaseAddress + "youtube200" + "?" + "delay=" + delay);
+            SharedLog.Add($"GetYoutubeSubscribers method continue on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? subscribers = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, subscribers);
@@ -50,8 +51,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            SharedLog.Add($"GetTwitterFollowers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            SharedLog.Add($"GetTwitterFollowers method start on thread: {Thread.CurrentThread.ManagedThreadId}");
             result = await httpClient.GetStringAsync(httpClient.BaseAddress + "twitter200" + "?" + "delay=" + delay);
+            SharedLog.Add($"GetTwitterFollowers method continue on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? subscribers = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, subscribers);
@@ -69,8 +71,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            SharedLog.Add($"GetGithubFollowers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            SharedLog.Add($"GetGithubFollowers method start on thread: {Thread.CurrentThread.ManagedThreadId}");
             result = await httpClient.GetStringAsync(httpClient.BaseAddress + "github200" + "?" + "delay=" + delay);
+            SharedLog.Add($"GetGithubFollowers method continue on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? subscribers = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, subscribers);
@@ -152,7 +155,7 @@ internal class SocialMediaApiCalls
     {
         var masterList = getReferenceToSharedResultList.Invoke();
 
-        var threadId = Thread.CurrentThread.ManagedThreadId;
+        //var threadId = Thread.CurrentThread.ManagedThreadId;
 
         var mutableMaster = masterList.ToList();
 
@@ -161,7 +164,7 @@ internal class SocialMediaApiCalls
             foreach (var item in sourceList)
             {
                 Thread.Sleep(100);
-                mutableMaster.Add($"{item} result handled on thread: {threadId}");
+                mutableMaster.Add($"{item}");
             }
         }
 

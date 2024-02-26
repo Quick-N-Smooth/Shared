@@ -10,7 +10,7 @@
 <h1>Multiple Api Call Page</h1>
 
 <button class="btn btn-primary" @onclick="RunSequential">Run sequential</button>
-<button class="btn btn-primary" @onclick="RunParallel">Run parallelt</button>
+<button class="btn btn-primary" @onclick="RunAsync">Run parallelt</button>
 
 <p>
     Result: 
@@ -35,6 +35,10 @@
 
     private async Task RunSequential()
     {
+        var logBuilder = new StringBuilder();
+
+        logBuilder.AppendLine($"Sequential API call, start on thread: {Thread.CurrentThread.ManagedThreadId}");
+
         var stopWatch = Stopwatch.StartNew();
 
         var apiClient = new SocialMediaApiCalls();
@@ -61,25 +65,27 @@
 
         // WRITING OUTPUT
 
-        var sb = new StringBuilder();
-
         // just for experiment, read log the shared list
         foreach (var item in apiClient.SharedLog)
         {
-            sb.AppendLine(item);
+            logBuilder.AppendLine(item);
         }
 
         // just for experiment, read the shared list (in real app you get it from the result objects )
         foreach (var item in apiClient.SharedFollowersList)
         {
-            sb.AppendLine(item);
+            logBuilder.AppendLine(item);
         }
-        log = sb.ToString();
+        log = logBuilder.ToString();
 
     }
 
-    private async Task RunParallel()
+    private async Task RunAsync()
     {
+        var logBuilder = new StringBuilder();
+
+        logBuilder.AppendLine($"Async API call, start on thread: {Thread.CurrentThread.ManagedThreadId}");
+
         var stopWatch = Stopwatch.StartNew();
 
         var apiClient = new SocialMediaApiCalls();
@@ -109,19 +115,17 @@
 
         // WRITING OUTPUT
 
-        var sb = new StringBuilder();
-
         // just for experiment, read log the shared list
         foreach (var item in apiClient.SharedLog)
         {
-            sb.AppendLine(item);
+            logBuilder.AppendLine(item);
         }
 
         // just for experiment, read from the shared list (in real app you get it from the result objects )
         foreach (var item in apiClient.SharedFollowersList)
         {
-            sb.AppendLine(item);
+            logBuilder.AppendLine(item);
         }
-        this.log = sb.ToString();
+        this.log = logBuilder.ToString();
     }
 }

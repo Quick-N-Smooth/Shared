@@ -1,4 +1,5 @@
 ﻿using CallAsyncMethodsParallel.CallApi;
+using Nito.AsyncEx;
 using System.Diagnostics;
 
 public class Program
@@ -6,20 +7,27 @@ public class Program
 
     public static async Task Main(string[] args)
     {
-        var syncObject = SynchronizationContext.Current is null ? "null" : SynchronizationContext.Current.ToString();
-        Console.WriteLine($"The SynchronizationContext is {syncObject}");
+        // NOTE: NITO PACKAGE INSTALLS A CUSTOM SynchronizationContext THAT MAKES THE CONSOLE APPLICATION A
+        // SINGLE THREADED AS LONG AS .ConfigureAwait(true) IS USED 
+        // BY THIS WAY THE CONSOLE APP WORKS LIKE BLAZOR
+        AsyncContext.Run(async () =>
+        {
 
-        var taskScheduler = TaskScheduler.Current.ToString();
+            var syncObject = SynchronizationContext.Current is null ? "null" : SynchronizationContext.Current.ToString();
+            Console.WriteLine($"The SynchronizationContext is {syncObject}");
 
-        Console.WriteLine($"The Task Scheduler is {taskScheduler}");
+            var taskScheduler = TaskScheduler.Current.ToString();
 
-        await SyncRun();
-        await AsyncRun();
+            Console.WriteLine($"The Task Scheduler is {taskScheduler}");
 
-        //await SequentialRunWithException();
-        //await ParallelRunWithExceptions();
+            await SyncRun();
+            await AsyncRun();
 
-        Console.ReadLine();
+            //await SequentialRunWithException();
+            //await ParallelRunWithExceptions();
+
+            Console.ReadLine();
+        });
     }
 
     private static async Task SyncRun()
@@ -33,9 +41,9 @@ public class Program
 
         var apiClient = new SocialMediaApiCalls();
 
-        var youtubeSubscribers = await apiClient.GetYoutubeSubscribers(httpClient, delay: 2000);
-        var twitterFollowers = await apiClient.GetTwitterFollowers(httpClient, delay: 1900);
-        var githubFollowers = await apiClient.GetGithubFollowers(httpClient, delay: 1800);
+        var youtubeSubscribers = await apiClient.GetYoutubeSubscribers(httpClient, delay: 2000).ConfigureAwait(true);
+        var twitterFollowers = await apiClient.GetTwitterFollowers(httpClient, delay: 1900).ConfigureAwait(true); ;
+        var githubFollowers = await apiClient.GetGithubFollowers(httpClient, delay: 1800).ConfigureAwait(true); ;
 
         var result = $"Sequential done in {stopWatch.ElapsedMilliseconds} ms";
 

@@ -26,9 +26,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            Console.WriteLine($"GetYoutubeSubscribers start method on thread: {Thread.CurrentThread.ManagedThreadId}");
-            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "youtube200" + "?" + "delay=" + delay).ConfigureAwait(false);
-            Console.WriteLine($"GetYoutubeSubscribers digest result on thread: {Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"GetYoutubeSubscribers method start on thread: {Thread.CurrentThread.ManagedThreadId}");
+            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "youtube200" + "?" + "delay=" + delay).ConfigureAwait(true);
+            Console.WriteLine($"GetYoutubeSubscribers method continue on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
@@ -46,9 +46,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            Console.WriteLine($"GetTwitterFollowers start method on thread: {Thread.CurrentThread.ManagedThreadId}");
-            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "twitter200" + "?" + "delay=" + delay).ConfigureAwait(false);
-            Console.WriteLine($"GetTwitterFollowers digest result on thread: {Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"GetTwitterFollowers method start on thread: {Thread.CurrentThread.ManagedThreadId}");
+            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "twitter200" + "?" + "delay=" + delay).ConfigureAwait(true);
+            Console.WriteLine($"GetTwitterFollowers method continue on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
@@ -66,9 +66,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            Console.WriteLine($"GetGithubFollowers start method on thread: {Thread.CurrentThread.ManagedThreadId}");
-            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "github200" + "?" + "delay=" + delay).ConfigureAwait(false);
-            Console.WriteLine($"GetGithubFollowers digest result on thread: {Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"GetGithubFollowers method start on thread: {Thread.CurrentThread.ManagedThreadId}");
+            result = await httpClient.GetStringAsync(httpClient.BaseAddress + "github200" + "?" + "delay=" + delay).ConfigureAwait(true);
+            Console.WriteLine($"GetGithubFollowers method continue on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
@@ -147,6 +147,9 @@ internal class SocialMediaApiCalls
 
     private static void CombineEnumerables(Func<IEnumerable<string>> getReferenceToSharedResultList, Action<IEnumerable<string>> saveToSharedResultList, IEnumerable<string>? sourceList)
     {
+        // NOTE THAT SEMAPHORE DOES NOT NEED IF THE APPLICATION IS SINGLE THREADED (AsyncContext.Run is used in the main method)
+        // HOWEVER IN A USUAL CONSOLE APP (WHICH IS MULTITHREADED) THE SEMAPHORE IS NEEDED
+        // TRY REMOVING THE AsyncContext.Run TOGETHER WITH THE SEMAPHORE, SOME OF ITEMS IN THE RESULT LIST WILL NOT ADDED
         semaphoreSlim.Wait();
 
         try
