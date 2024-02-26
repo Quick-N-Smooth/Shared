@@ -1,0 +1,67 @@
+﻿@page "/cancellationtoken"
+@inject HttpClient Http
+
+@using BlazorTemplate.Client.Components
+
+<h3>CancellationToken Page</h3>
+
+<p>
+    This is a sample of how to use the manual cancellation token on an API call.
+</p>
+<p>
+    Usage: When you click on Start, it will start a long process on an API. If you wait 10 seconds it will return with t result.
+    However if you click on Cancel during the process, it will cancel the process on the API side.
+</p>
+<p>
+    <i>
+        Reminder: When the token is set to Cancel, it will ignite an TaskCanceledException on the API site.
+        On the client site we need to handle the exception.
+    </i>
+</p>
+<p>
+    For the API code, see LongProcessController.cs on the server app.
+</p>
+
+<div>
+    <input type="text" @bind-value="processResult" />
+    <button type="button" class="btn btn-primary" disabled="@(processInProgress)" @onclick="StartProcess">Start</button>
+    <button type="button" class="btn btn-primary" disabled="@(!processInProgress)" @onclick="CancelProcess">Cancel</button>
+</div>
+
+@code {
+
+    private string? processResult = null;
+    private bool processInProgress = false;
+    private CancellationTokenSource? cancellationTokenSource;
+
+    private async Task StartProcess()
+    {
+        try
+        {
+            processResult = string.Empty;
+            processInProgress = true;
+            HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Get, "LongProcess");
+            cancellationTokenSource = new CancellationTokenSource();
+            var token = cancellationTokenSource.Token;
+            var response = await Http.SendAsync(request, token);
+            processResult = await response.Content.ReadAsStringAsync();
+        }
+        catch (TaskCanceledException)
+        {
+            processResult = "Cancelled";
+        }
+        finally
+        {
+            processInProgress = false;    
+        }
+    }
+
+    private void CancelProcess()
+    {
+        if (cancellationTokenSource is not null)
+        {
+            cancellationTokenSource.Cancel();
+        }
+    }
+
+}

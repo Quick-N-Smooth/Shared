@@ -1,0 +1,127 @@
+﻿@page "/multipleapicall"
+@using System.Diagnostics
+@using BlazorTemplate.Client.ApiCalls
+@using System.Text
+@using BlazorTemplate.Client.Helpers
+@inject HttpClient HttpClient
+
+<PageTitle>Multiple api</PageTitle>
+
+<h1>Multiple Api Call Page</h1>
+
+<button class="btn btn-primary" @onclick="RunSequential">Run sequential</button>
+<button class="btn btn-primary" @onclick="RunParallel">Run parallelt</button>
+
+<p>
+    Result: 
+</p>
+<p>
+    <textarea cols="200" rows="6" style="width:100%; height:auto">@resultText</textarea>
+</p>
+
+<p>
+    Log:
+</p>
+<p>
+    <textarea cols="200" rows="20" style="width:50%; height:auto">@log</textarea>
+</p>
+
+@code {
+    private string resultText = string.Empty;
+
+    private SlidingQueue<string> result = new SlidingQueue<string>(5);
+
+    private string log = string.Empty;
+
+    private async Task RunSequential()
+    {
+        var stopWatch = Stopwatch.StartNew();
+
+        var apiClient = new SocialMediaApiCalls();
+
+        var youtubeFollowers = await apiClient.GetYoutubeSubscribers(HttpClient, delay: 2000);
+        var twitterFollowers = await apiClient.GetTwitterFollowers(HttpClient, delay: 1900);
+        var githubFollowers = await apiClient.GetGithubFollowers(HttpClient, delay: 1800);
+
+        var result = $"Sequential done in {stopWatch.ElapsedMilliseconds} ms";
+
+        dynamic subcribers = new
+        {
+            Name = "Tom",
+            YoutubeSubscribers = youtubeFollowers?.Subscribers is null ? "N/A" : youtubeFollowers?.Subscribers.Count().ToString(),
+            TwitterFollowers = twitterFollowers?.Subscribers is null ? "N/A" : twitterFollowers?.Subscribers.Count().ToString(),
+            GetGithubFollowers = githubFollowers?.Subscribers is null ? "N/A" : githubFollowers?.Subscribers.Count().ToString(),
+        };
+
+        result += subcribers;
+
+        this.result.Add(result);
+
+        resultText = this.result.ToString();
+
+        // WRITING OUTPUT
+
+        var sb = new StringBuilder();
+
+        // just for experiment, read log the shared list
+        foreach (var item in apiClient.SharedLog)
+        {
+            sb.AppendLine(item);
+        }
+
+        // just for experiment, read the shared list (in real app you get it from the result objects )
+        foreach (var item in apiClient.SharedFollowersList)
+        {
+            sb.AppendLine(item);
+        }
+        log = sb.ToString();
+
+    }
+
+    private async Task RunParallel()
+    {
+        var stopWatch = Stopwatch.StartNew();
+
+        var apiClient = new SocialMediaApiCalls();
+
+        var youtubeSubscribers = apiClient.GetYoutubeSubscribers(HttpClient, delay: 2000);
+        var twitterFollowers = apiClient.GetTwitterFollowers(HttpClient, delay: 1900);
+        var githubFollowers = apiClient.GetGithubFollowers(HttpClient, delay: 1800);
+
+        await Task.WhenAll(youtubeSubscribers, twitterFollowers, githubFollowers);
+
+        var result = $"Parallel done in {stopWatch.ElapsedMilliseconds} ms";
+
+        // Note that after WhenAll, it is safe to use Result
+        dynamic subscribers = new
+        {
+            Name = "Tom",
+            YoutubeSubscribers = youtubeSubscribers?.Result?.Subscribers is null ? "N/A" : youtubeSubscribers?.Result?.Subscribers.Count().ToString(),
+            TwitterFollowers = twitterFollowers?.Result?.Subscribers is null ? "N/A" : twitterFollowers?.Result?.Subscribers.Count().ToString(),
+            GetGithubFollowers = githubFollowers?.Result?.Subscribers is null ? "N/A" : githubFollowers?.Result?.Subscribers.Count().ToString(),
+        };
+
+        result += subscribers;
+
+        this.result.Add(result);
+
+        resultText = this.result.ToString();
+
+        // WRITING OUTPUT
+
+        var sb = new StringBuilder();
+
+        // just for experiment, read log the shared list
+        foreach (var item in apiClient.SharedLog)
+        {
+            sb.AppendLine(item);
+        }
+
+        // just for experiment, read from the shared list (in real app you get it from the result objects )
+        foreach (var item in apiClient.SharedFollowersList)
+        {
+            sb.AppendLine(item);
+        }
+        this.log = sb.ToString();
+    }
+}

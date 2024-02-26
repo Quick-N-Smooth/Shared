@@ -1,0 +1,19 @@
+﻿@page "/navigation"
+
+<h3>Using the NavigationManager</h3>
+
+<a href="/counter" class="btn btn-outline-primary">Navigate to counter from html</a>
+
+<button type="button" @onclick="NavigateToCounter" class="btn btn-outline-primary">Navigate to counter from code</button>
+
+@code {
+
+    [Inject]
+    public NavigationManager Navigator { get; set; } = default!;
+
+    public void NavigateToCounter()
+    {
+        Navigator.NavigateTo("/counter");
+    }
+
+}

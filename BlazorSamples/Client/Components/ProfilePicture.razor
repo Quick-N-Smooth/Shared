@@ -1,0 +1,14 @@
+﻿
+<div class="profile-picture">
+    @ChildContent
+</div>
+
+
+@code
+{
+    /// <remarks>
+    /// The property must be named as ChildContent
+    /// </remarks>
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; } 
+}

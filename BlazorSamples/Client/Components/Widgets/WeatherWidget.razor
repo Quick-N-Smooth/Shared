@@ -1,0 +1,20 @@
+﻿<h3>The weather is @Weather</h3>
+
+@code {
+    private List<string> _weatherWords = new List<string>
+    {
+        "rainy",
+        "sunny",
+        "cloudy"
+
+    };
+
+    public string Weather
+    {
+        get 
+        {
+            return _weatherWords.OrderBy(x => Guid.NewGuid()).First();
+        }    
+    }
+
+}

@@ -1,0 +1,13 @@
+.panel-collapsible-collapsed {
+    border-bottom: 1px solid lightgrey !important;
+}
+
+.panel-collapsible-expanded {
+    border: none !important;
+}
+
+.image-collapsible {
+    display:block;
+    margin-left:auto;
+    margin-right:auto;
+}

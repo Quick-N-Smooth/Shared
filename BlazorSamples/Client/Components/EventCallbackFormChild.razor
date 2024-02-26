@@ -1,0 +1,38 @@
+﻿@using BlazorTemplate.Client.Models
+
+@if (ShowForm)
+{
+    <div style="border:1px solid black;">
+        <EditForm Model=@Person OnValidSubmit="Save">
+            <div class="form-group">
+                <label for="Name">Name</label>
+                <InputText @bind-Value=Person.Name class="form-control" id="Name" />
+            </div>
+            <div class="form-group">
+                <label for="Age">Age</label>
+                <InputNumber @bind-Value=Person.Age class="form-control" id="Age" />
+            </div>
+            <input type="submit" class="btn btn-primary" value="Save" />
+            <input type="button" class="close btn btn-lg" @onclick="@Close" value="Close" />
+        </EditForm>
+    </div>
+}
+
+@code {
+    public bool ShowForm = false;
+
+    Person Person = new Person();
+
+    public void Save()
+    {
+        SaveCallback.InvokeAsync(new SavePersonEventArgs(this, Person));
+    }
+
+    [Parameter]
+    public EventCallback<SavePersonEventArgs> SaveCallback { get; set; }
+
+    public void Close()
+    {
+        ShowForm = false;
+    }
+}

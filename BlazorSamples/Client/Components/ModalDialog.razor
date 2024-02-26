@@ -1,0 +1,38 @@
+﻿@if (_showDialog)
+{
+    <div class="modal fade show d-block" id="exampleModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="titleLabel">EventCallback Child</h5>
+                    <div>@Message</div>
+                    <button type="button" class="close btn btn-lg" @onclick="@Close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@code
+{
+    private bool _showDialog = false;
+
+    [Parameter]
+    public string? Message
+    {
+        get; set;
+    }
+
+    protected override void OnParametersSet()
+    {
+        if(!string.IsNullOrWhiteSpace(Message))
+            _showDialog = true;
+    }
+
+    public void Close()
+    {
+        _showDialog = false;
+    }
+}

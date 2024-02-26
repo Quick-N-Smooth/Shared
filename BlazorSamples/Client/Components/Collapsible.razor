@@ -1,0 +1,57 @@
+﻿<div class="panel-collapsible-collapsed">
+        <img class="image-collapsible"
+            src="@(Collapsed ? HREF_COLLAPSED_IMAGE : HREF_EXPANDED_IMAGE)"
+            alt="@(Collapsed ? "open" : "close")"
+            title="@(Collapsed ? HREF_COLLAPSED_TEXT : HREF_EXPANDED_TEXT)"
+            @onclick="TriggerEventCallback" />
+    </div>
+<div class="panel panel-default panel-collapsible-expanded border @(Collapsed ? COLLAPSED : EXPANDED)" border="none">
+    <div class="panel-heading alert-primary">
+        <h3 class="panel-title">Collapsible component</h3>
+    </div>
+
+    <div class="panel-body">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-2 font-weight-bold">Profile</div>
+            </div>
+            <div class="row">
+                <div class="col-auto">
+                    <label>Name</label>
+                    <input type="text" />
+                </div>
+                <div class="col-auto">
+                    <label>Active</label>
+                    <input type="checkbox" />
+                </div>
+                <div class="col-auto">
+                    <button type="button" @onclick="TriggerEventCallback">-</button>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</div>
+
+@code {
+
+    private const string HREF_COLLAPSED_TEXT = "Click to expand search";
+    private const string HREF_EXPANDED_TEXT = "Click to collapse";
+
+    private const string HREF_COLLAPSED_IMAGE = "images/open.png";
+    private const string HREF_EXPANDED_IMAGE = "images/close.png";
+
+    private const string COLLAPSED = "collapse";
+    private const string EXPANDED = "";
+
+    [Parameter]
+    public bool Collapsed { get; set; } = true; // hide by default
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> TriggerEventCallback
+    {
+        get; set;
+    }
+
+
+}

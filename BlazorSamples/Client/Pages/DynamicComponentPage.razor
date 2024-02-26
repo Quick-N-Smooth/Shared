@@ -1,0 +1,16 @@
+﻿@page "/dynamic"
+
+@using BlazorTemplate.Client.Components.Widgets;
+
+<h3>DynamicComponent Page</h3>
+
+@foreach (var widgetType in Widgets)
+{
+    <DynamicComponent Type="widgetType"></DynamicComponent>
+}
+
+@code {
+    public List<Type> Widgets { get; set; } =
+            new List<Type> { typeof(TodayWidget), typeof(WeatherWidget) };
+
+}

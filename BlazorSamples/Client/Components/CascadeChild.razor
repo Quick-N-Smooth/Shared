@@ -1,0 +1,38 @@
+﻿<div>
+    <h3>A Cascade Child</h3>
+    
+    <p>The meaning of life is @Meaning</p>
+
+    <CascadeGrandChild></CascadeGrandChild>
+
+</div>
+
+@if (OnMeaningRaise is not null)
+{
+    <div>
+        <button type="button" class="btn btn-primary" @onclick="RaiseMeaning">Raise meaning</button>
+    </div>
+}
+else
+{
+    <div>
+        Raising is not activated here
+    </div>
+}
+
+<hr>
+
+@code {
+
+    [CascadingParameter(Name = "Answer")]
+    private int Meaning { get; set; }
+
+    [Parameter] public Action? OnMeaningRaise { get; set; }
+
+    private void RaiseMeaning()
+    {
+        if (OnMeaningRaise is not null)
+            OnMeaningRaise?.Invoke();
+    }
+
+}

@@ -1,0 +1,27 @@
+﻿@page "/collapsible"
+
+@using BlazorTemplate.Client.Components
+
+<div class="row">
+    <div class="col-sm-4 font-weight-bold">Collapse the collapsible from the page</div>
+    <div class="col-sm-2">                    
+        <button @onclick="ToggleCollapse"  > @* OR THIS WAY: @onclick="e => this.Collapsed = !this.Collapsed"> *@
+            @( this.Collapsed ? "+" : "-")
+        </button>
+    </div>
+</div>
+<Collapsible Collapsed="@Collapsed" TriggerEventCallback="HandleEventCallback"></Collapsible>
+
+@code {
+    private bool Collapsed = true;
+
+    private void ToggleCollapse()
+    {
+        this.Collapsed = !this.Collapsed;
+    }
+
+    private void HandleEventCallback()
+    {
+        ToggleCollapse();
+    }
+}

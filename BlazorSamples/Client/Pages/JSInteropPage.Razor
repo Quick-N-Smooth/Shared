@@ -1,0 +1,92 @@
+﻿@page "/jsinterop"
+
+@using System.Diagnostics
+
+@* @inject IJSRuntime JSRuntime *@
+
+<h3>Javasript interop with global javascript</h3>
+
+<hr>
+
+<h4>Example 1. With global javascript method. (Note that the jsInterop.js file is references in the index.html)</h4>
+
+<input type="text" @bind="message" />
+<button class="btn btn-primary" @onclick="Alert">Alert Me!</button>
+
+<hr>
+
+<h4>Example 2. With isolated javascript.</h4>
+
+<input type="text" @bind="messageAgain" />
+<button class="btn btn-primary" @onclick="AlertAgain">Alert Me isolated!</button>
+
+<hr>
+
+<h4>Example 3. Using the element reference #ref in javascript.</h4>
+
+<div @ref="ToggleSectionRef" style="display: none">
+    <span>This is a toggled section.</span>
+</div>
+<button class="btn btn-primary" @onclick="ToggleSection">Toggle!</button>
+
+@code {
+
+    string message = string.Empty;
+
+    string messageAgain = string.Empty;
+
+    [Inject]
+    public IJSRuntime? JSRuntime { get; set; }
+
+    private IJSObjectReference? _jsModule;
+    protected override async Task OnInitializedAsync()
+    {
+        if (JSRuntime is not null)
+        {
+            _jsModule = await JSRuntime.InvokeAsync<IJSObjectReference>("import", "./js/jsInteropIsolated.js");
+        }
+    }
+
+    private async Task Alert()
+    {
+        if (JSRuntime is not null)
+        {
+            try
+            {
+                await JSRuntime.InvokeVoidAsync("console.log", message);
+                await JSRuntime.InvokeVoidAsync("PopupAlert", message);
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("console.log", ex.Message);
+            }
+        }
+    }
+
+    private async Task AlertAgain()
+    {
+        if (JSRuntime is not null && _jsModule is not null)
+        {
+            try
+            {
+                await JSRuntime.InvokeVoidAsync("console.log", messageAgain);
+                await _jsModule.InvokeVoidAsync("PopupAlert", messageAgain);
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("console.log", ex.Message);
+            }
+        }
+    }
+
+    private ElementReference ToggleSectionRef { get; set; }
+
+    private async Task ToggleSection()
+    {
+        if (JSRuntime is not null && _jsModule is not null)
+        {
+            await _jsModule.InvokeVoidAsync("ToggleSection", ToggleSectionRef);
+        }
+    
+    }
+}

@@ -1,0 +1,10 @@
+﻿<h3>Today is @Today</h3>
+
+@code {
+
+    public string Today
+    {
+        get { return DateTime.Today.ToLocalTime().ToString("yyyy-MM-dd"); }    
+    }
+
+}

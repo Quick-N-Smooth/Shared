@@ -1,0 +1,74 @@
+﻿@page "/eventcallback"
+
+@using BlazorTemplate.Client.Components
+@using BlazorTemplate.Client.Models
+
+<h3>EventCallback parent</h3>
+
+<EventCallbackDialogChild @ref="ChildDialog" CloseDialogCallback="CloseDialogCallback" TriggerEventCallback="HandleEventCallback" ShowAtStart=@_showChildDialog></EventCallbackDialogChild>
+
+<EventCallbackFormChild @ref="ChildForm" SaveCallback="OnSaveForm"></EventCallbackFormChild>
+
+<button class="btn btn-outline-primary btn-sm mb-1" @onclick="(() => ShowDialog())">
+    Show Dialog
+</button>
+
+<button class="btn btn-outline-primary btn-sm mb-1" @onclick="(() => ShowForm())">
+    Show From
+</button>
+
+<p role="status">Current count: @ClickCounter</p>
+
+<p role="status">Form callback: @FormResult</p>
+
+@code
+{
+    #region PopupChildDialog
+
+    private EventCallbackDialogChild? ChildDialog;
+
+    private int ClickCounter{get;set;}
+
+    private bool _showChildDialog = false;
+
+    private void ShowDialog()
+    {
+        if (ChildDialog != null)
+            _showChildDialog = true;
+    }
+
+    private void CloseDialogCallback()
+    {
+        if (ChildDialog != null)
+            _showChildDialog = false;
+    }
+
+    private void HandleEventCallback()
+    {
+        ClickCounter++;
+    }
+
+    #endregion
+
+    #region ChildForm
+
+    private EventCallbackFormChild? ChildForm;
+
+    private string FormResult = string.Empty;
+
+    private void OnSaveForm(SavePersonEventArgs savePersonEventArgs)
+    {
+        FormResult = $"Name: {savePersonEventArgs.Person.Name}, Age: {savePersonEventArgs.Person.Age}";
+        savePersonEventArgs.Sender.ShowForm = false;
+    }
+
+    private void ShowForm()
+    {
+        if (ChildForm != null)
+            ChildForm.ShowForm = true;
+    }
+
+    #endregion
+
+
+}
