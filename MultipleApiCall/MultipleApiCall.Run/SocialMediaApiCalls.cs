@@ -149,8 +149,8 @@ internal class SocialMediaApiCalls
     {
         // NOTE THAT SEMAPHORE DOES NOT NEED IF THE APPLICATION IS SINGLE THREADED (AsyncContext.Run is used in the main method)
         // HOWEVER IN A USUAL CONSOLE APP (WHICH IS MULTITHREADED) THE SEMAPHORE IS NEEDED
-        // TRY REMOVING THE AsyncContext.Run TOGETHER WITH THE SEMAPHORE, SOME OF ITEMS IN THE RESULT LIST WILL NOT ADDED
-        semaphoreSlim.Wait();
+        // TRY REMOVING THE AsyncContext.Run TOGETHER WITH THE SEMAPHORE, SOME OF ITEMS IN THE RESULT LIST WILL NOT ADDED IN ASYNC CALL
+        // semaphoreSlim.Wait();
 
         try
         {
@@ -174,7 +174,7 @@ internal class SocialMediaApiCalls
         }
         finally
         {
-            semaphoreSlim.Release();
+            // semaphoreSlim.Release();
         }
     }
 
