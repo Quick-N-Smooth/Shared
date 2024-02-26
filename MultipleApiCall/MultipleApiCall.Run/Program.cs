@@ -13,8 +13,8 @@ public class Program
 
         Console.WriteLine($"The Task Scheduler is {taskScheduler}");
 
-        await SequentialRun();
-        await ParallelRun();
+        await SyncRun();
+        await AsyncRun();
 
         //await SequentialRunWithException();
         //await ParallelRunWithExceptions();
@@ -22,7 +22,7 @@ public class Program
         Console.ReadLine();
     }
 
-    private static async Task SequentialRun()
+    private static async Task SyncRun()
     {
         Console.WriteLine($"Sequential API call, start on thread: {Thread.CurrentThread.ManagedThreadId}");
 
@@ -59,10 +59,10 @@ public class Program
         }
     }
 
-    private static async Task ParallelRun()
+    private static async Task AsyncRun()
     {
 
-        Console.WriteLine($"Parallel API call, start on thread: {Thread.CurrentThread.ManagedThreadId} ");
+        Console.WriteLine($"Async API call, start on thread: {Thread.CurrentThread.ManagedThreadId} ");
 
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5052");
@@ -89,7 +89,7 @@ public class Program
 
         result += userProfile;
 
-        Console.WriteLine($"Parallel API call, write out result on thread: {Thread.CurrentThread.ManagedThreadId}");
+        Console.WriteLine($"Async API call, write out result on thread: {Thread.CurrentThread.ManagedThreadId}");
         Console.WriteLine(result);
 
         foreach (var item in apiClient.SharedResultList)
@@ -98,7 +98,7 @@ public class Program
         }
     }
 
-    private static async Task SequentialRunWithException()
+    private static async Task SyncRunWithException()
     {
         Console.WriteLine("Sequential API call with 500 response");
 
@@ -124,14 +124,14 @@ public class Program
         Console.WriteLine(userProfile.ToString());
     }
 
-    private static async Task ParallelRunWithExceptions()
+    private static async Task AsyncRunWithExceptions()
     {
 
         // https://github.com/dotnet/core/issues/7011
         // https://gist.github.com/morgankenyon/686b8004932be1d8e02356fb6b652cfc
 
 
-        Console.WriteLine("Parallel with 500 response");
+        Console.WriteLine("Async with 500 response");
 
         var httpClient = new HttpClient();
         httpClient.BaseAddress = new Uri("http://localhost:5052");

@@ -26,8 +26,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            Console.WriteLine($"GetYoutubeSubscribers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"GetYoutubeSubscribers start method on thread: {Thread.CurrentThread.ManagedThreadId}");
             result = await httpClient.GetStringAsync(httpClient.BaseAddress + "youtube200" + "?" + "delay=" + delay).ConfigureAwait(false);
+            Console.WriteLine($"GetYoutubeSubscribers digest result on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
@@ -45,8 +46,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            Console.WriteLine($"GetTwitterFollowers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"GetTwitterFollowers start method on thread: {Thread.CurrentThread.ManagedThreadId}");
             result = await httpClient.GetStringAsync(httpClient.BaseAddress + "twitter200" + "?" + "delay=" + delay).ConfigureAwait(false);
+            Console.WriteLine($"GetTwitterFollowers digest result on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
@@ -64,8 +66,9 @@ internal class SocialMediaApiCalls
         string? result = null;
         try
         {
-            Console.WriteLine($"GetGithubFollowers method on thread: {Thread.CurrentThread.ManagedThreadId}");
+            Console.WriteLine($"GetGithubFollowers start method on thread: {Thread.CurrentThread.ManagedThreadId}");
             result = await httpClient.GetStringAsync(httpClient.BaseAddress + "github200" + "?" + "delay=" + delay).ConfigureAwait(false);
+            Console.WriteLine($"GetGithubFollowers digest result on thread: {Thread.CurrentThread.ManagedThreadId}");
             var dataObject = JsonConvert.DeserializeObject<SocialMedia>(result);
             IEnumerable<string>? list = dataObject?.Subscribers;
             CombineEnumerables(getReferenceToSharedResultList, saveToSharedResultList, list);
@@ -159,7 +162,7 @@ internal class SocialMediaApiCalls
                 foreach (var item in sourceList)
                 {
                     Thread.Sleep(100);
-                    mutableMaster.Add($"{item} result handled on thread: {threadId}");
+                    mutableMaster.Add($"{item}");
                 }
             }
 
