@@ -24,10 +24,13 @@
 
 <h4>Example 3. Using the element reference #ref in javascript.</h4>
 
-<div @ref="ToggleSectionRef" style="display: none">
+<div @ref="toggleSectionRef" style="display: none">
     <span>This is a toggled section.</span>
 </div>
 <button class="btn btn-primary" @onclick="ToggleSection">Toggle!</button>
+<button class="btn btn-primary" @onclick="ColorSection">Color!</button>
+<button class="btn btn-primary" @onclick="TriggerClickOnFileInput">Trigger click on Fileinput hidden button</button>
+<InputFile hidden @ref="inputFileRef" id="inputFileId" accept=".md" />
 
 @code {
 
@@ -79,14 +82,55 @@
         }
     }
 
-    private ElementReference ToggleSectionRef { get; set; }
+    private ElementReference toggleSectionRef { get; set; }
 
     private async Task ToggleSection()
     {
         if (JSRuntime is not null && _jsModule is not null)
         {
-            await _jsModule.InvokeVoidAsync("ToggleSection", ToggleSectionRef);
+            await _jsModule.InvokeVoidAsync("ToggleSection", toggleSectionRef);
         }
-    
+
+    }
+
+    private async Task ColorSection()
+    {
+        if (JSRuntime is not null && _jsModule is not null)
+        {
+            await _jsModule.InvokeVoidAsync("ColorSection", toggleSectionRef, "red");
+        }
+
+    }
+
+    ElementReference colorButtonRef;
+
+    private async Task ClickOnElement()
+    {
+        if (JSRuntime is not null && _jsModule is not null)
+        {
+            await _jsModule.InvokeVoidAsync("ClickOnElement", colorButtonRef);
+        }
+
+    }
+
+    InputFile? inputFileRef;
+
+    // it trigger the click event on an unvisible Blazor button using JS
+    private async Task TriggerClickOnFileInput()
+    {
+        if (JSRuntime is not null && _jsModule is not null
+            && inputFileRef is not null
+            && inputFileRef.Element is not null)
+        {
+            try
+            {
+                await _jsModule.InvokeVoidAsync("ClickOnElement", inputFileRef.Element);
+            }
+            catch (Exception ex)
+            {
+                await JSRuntime.InvokeVoidAsync("console.log", ex.Message);
+            }
+        }
+
     }
 }

@@ -12,4 +12,16 @@ export function ToggleSection(element) {
         element.style.display = "none";
     }
 }
+export function ColorSection(element, color) {
+    if (element == undefined) {
+        return;
+    }
+    element.style.color = color;
+}
+export function ClickOnElement(element) {
+    if (element == undefined) {
+        return;
+    }
+    element.click();
+}
 
