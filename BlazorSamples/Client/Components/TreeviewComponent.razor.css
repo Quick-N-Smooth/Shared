@@ -1,0 +1,12 @@
+﻿.treeview-node {
+    list-style: none;
+    cursor: pointer;
+    font-size: large;
+    margin: 1em;
+    padding: 0.5em;
+    border: dotted 1px;
+}
+
+.treeview-node .node-selected {
+    background-color: darkmagenta;
+}

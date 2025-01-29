@@ -3,13 +3,10 @@
 <div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
         <a class="navbar-brand" href="">BlazorTemplate</a>
-        <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
-            <span class="navbar-toggler-icon"></span>
-        </button>
     </div>
 </div>
 
-<div class="@NavMenuCssClass nav-scrollable" @onclick="ToggleNavMenu">
+<div class="nav-scrollable">
     <nav class="flex-column">
 
         <ProfilePicture>
@@ -23,82 +20,117 @@
         </div>
 
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="counter">
-                <span class="oi oi-plus" aria-hidden="true"></span> Counter
+            <NavLink class="nav-link" @onclick="()=>expandBasicsNav = !expandBasicsNav">
+                <span class="oi oi-plus" aria-hidden="true"></span> Basics
             </NavLink>
+            @if (expandBasicsNav)
+            { 
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" href="counter">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Counter
+                    </NavLink>
+                </div>
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" href="eventcallback">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Event callback
+                    </NavLink>
+                </div>
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" href="navigation">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Navigation manager
+                    </NavLink>
+                </div>
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" href="renderfragment">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Render fragment
+                    </NavLink>
+                </div>
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" href="dynamic">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Dynamic components
+                    </NavLink>
+                </div>
+                <div class="nav-item px-1">
+                    <NavLink class="nav-link" href="cascading">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Cascading
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="templated">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Templates
+                    </NavLink>
+                </div>
+            }
         </div>
+
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="eventcallback">
-                <span class="oi oi-plus" aria-hidden="true"></span> Event callback
+            <NavLink class="nav-link" @onclick="()=>expandCssJsSubNav = !expandCssJsSubNav">
+                <span class="oi oi-plus" aria-hidden="true"></span> Js-Css interop
             </NavLink>
+            @if (expandCssJsSubNav)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="jsinterop">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> JS interop
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="cssisolation">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Css isolation
+                    </NavLink>
+                </div>
+            }
         </div>
+
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="navigation">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Navigation manager
+            <NavLink class="nav-link" @onclick="()=>expandApiInterop = !expandApiInterop">
+                <span class="oi oi-plus" aria-hidden="true"></span> API interop
             </NavLink>
+            @if (expandApiInterop)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="fetchdata">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="cancellationtoken">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> CancellationToken
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="multipleapicall">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Multiple api call
+                    </NavLink>
+                </div>
+            }
         </div>
+
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="renderfragment">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Render fragment
+            <NavLink class="nav-link" @onclick="()=>expandControlsNav = !expandControlsNav">
+                <span class="oi oi-plus" aria-hidden="true"></span> Controls
             </NavLink>
+            @if (expandControlsNav)
+            {
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="treeview">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Treeview (recursive)
+                    </NavLink>
+                </div>
+                <div class="nav-item px-3">
+                    <NavLink class="nav-link" href="collapsible">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Collapsible
+                    </NavLink>
+                </div>
+            }
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="fetchdata">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Fetch data
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="dynamic">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Dynamic components
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="cssisolation">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Css isolation
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="cascading">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Cascading
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="templated">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Templated
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="collapsible">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Collapsible
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="jsinterop">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> JS interop
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="cancellationtoken">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> CancellationToken
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="multipleapicall">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Multiple api call
-            </NavLink>
-        </div>
+
     </nav>
 </div>
 
 @code {
-    private bool collapseNavMenu = true;
-
-    // private bool multiple = false;
-
-    private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
-
-    private void ToggleNavMenu()
-    {
-        collapseNavMenu = !collapseNavMenu;
-    }
+    private bool expandBasicsNav = false;
+    private bool expandCssJsSubNav = false;
+    private bool expandControlsNav = false;
+    private bool expandApiInterop = false;
 }

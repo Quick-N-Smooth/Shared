@@ -103,3 +103,8 @@ a, .btn-link {
 .profile-picture {
     opacity: 0.7 !important;
 }
+
+.myclass {
+    background: lightyellow;
+    color: aqua !important;
+}

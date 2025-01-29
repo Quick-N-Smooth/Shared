@@ -1,0 +1,33 @@
+﻿@page "/treeview"
+
+@using BlazorTemplate.Client.Helpers.Treeview
+@using BlazorTemplate.Client.Models.Treeview
+@using BlazorTemplate.Client.Components;
+
+<PageTitle>TreeviewPage</PageTitle>
+
+<h2>Selected node: @(selectedNode?.DisplayText ?? string.Empty)</h2>
+
+@if (rootNode is not null)
+{
+    <TreeviewComponent TreeNode="rootNode" ChildNodeClickedCallback="HandleNodeClickedCallback"></TreeviewComponent>
+}
+
+@code {
+    private TreeviewModel? rootNode;
+
+    private TreeviewModel? selectedNode;
+
+
+    protected override void OnInitialized()
+    {
+        rootNode = CreateTreviewData.RootNode();
+    }
+
+    private void HandleNodeClickedCallback(TreeviewModel node)
+    {
+        selectedNode = node;
+        StateHasChanged();
+    }
+
+}

@@ -1,0 +1,54 @@
+﻿@using BlazorTemplate.Client.Models.Treeview
+
+<ul>
+    <li class="treeview-node">
+
+        <a @onclick="() => OnNodeClicked(TreeNode)">
+            @DisplayIcon @TreeNode.DisplayText
+        </a>
+
+        @if (isExpanded)
+        {
+            @foreach (TreeviewModel childNode in TreeNode.Nodes)
+            {
+                <TreeviewComponent TreeNode="childNode" ChildNodeClickedCallback="OnChildNodeClickedCallback"></TreeviewComponent>
+            }
+        }
+    </li>
+</ul>
+
+@code {
+    [Parameter]
+    public TreeviewModel TreeNode { get; set; } = new TreeviewModel();
+
+    // [Parameter]
+    // public EventCallback<TreeviewModel> NodeClickedCallback { get; set; }
+
+    [Parameter]
+    public EventCallback<TreeviewModel> ChildNodeClickedCallback { get; set; }
+
+    private bool isExpanded;
+
+    private void OnNodeClicked(TreeviewModel node)
+    {
+        isExpanded = !isExpanded;
+        ChildNodeClickedCallback.InvokeAsync(node);
+    }
+
+    private void OnChildNodeClickedCallback(TreeviewModel node)
+    {
+        ChildNodeClickedCallback.InvokeAsync(node);
+    }
+
+    private string DisplayIcon
+    {
+        get
+        {
+            if (!TreeNode.Nodes.Any())
+            { 
+                return string.Empty; 
+            }
+            return isExpanded ? "-" : "+";
+        }
+    }
+}
