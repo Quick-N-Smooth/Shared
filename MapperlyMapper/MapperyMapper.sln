@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33723.286
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapperlyMapper", "MapperyMapper\MapperlyMapper.csproj", "{6BB70E9B-B847-4153-9622-0ED0856B3356}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MapperlyMapperUseCases", "MapperyMapperUseCases\MapperlyMapperUseCases.csproj", "{504CF28A-443D-4C7B-A796-BC9D87D299E6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{ED638A19-5385-4BE9-AC94-B8E185AD7C1F}"
+	ProjectSection(SolutionItems) = preProject
+		readme.md = readme.md
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{6BB70E9B-B847-4153-9622-0ED0856B3356}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6BB70E9B-B847-4153-9622-0ED0856B3356}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6BB70E9B-B847-4153-9622-0ED0856B3356}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6BB70E9B-B847-4153-9622-0ED0856B3356}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504CF28A-443D-4C7B-A796-BC9D87D299E6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504CF28A-443D-4C7B-A796-BC9D87D299E6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504CF28A-443D-4C7B-A796-BC9D87D299E6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504CF28A-443D-4C7B-A796-BC9D87D299E6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1886A197-DF1F-4E63-AE1B-E78BA35414B2}
+	EndGlobalSection
+EndGlobal
